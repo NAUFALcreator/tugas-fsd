@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mesin Cetak Antrean Mandiri (Kiosk) - SIANTRI</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/print.css">
+  <script src="/socket.io/socket.io.js" onerror="void 0"></script>
+</head>
+<body style="background: radial-gradient(circle at 50% 20%, #1e1b4b 0%, #0b0f19 80%); min-height: 100vh; display: flex; flex-direction: column;">
+
+  <div style="padding: 1.5rem 2rem; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between;">
+    <div style="display: flex; align-items: center; gap: 1rem;">
+      <div class="brand-logo" style="width: 48px; height: 48px; font-size: 1.5rem;">S</div>
+      <div>
+        <h1 style="font-size: 1.35rem; color: #fff;">MESIN ANTREAN MANDIRI</h1>
+        <p style="font-size: 0.8rem; color: var(--text-muted);">Silakan pilih layanan untuk mencetak nomor antrean</p>
+      </div>
+    </div>
+    <a href="/" class="btn btn-outline" style="font-size: 0.85rem;">
+      ← Kembali ke Portal Utama
+    </a>
+  </div>
+
+  <main style="flex: 1; display: flex; align-items: center; justify-content: center; padding: 2rem;">
+    <div class="container" style="max-width: 1000px; width: 100%;">
+      <div style="text-align: center; margin-bottom: 2.5rem;">
+        <h2 style="font-size: 2.5rem; font-weight: 800; color: #fff; margin-bottom: 0.5rem;">
+          Sentuh Layanan yang Anda Tuju
+        </h2>
+        <p style="font-size: 1.1rem; color: var(--text-muted);">
+          Tiket akan otomatis tercetak beserta estimasi waktu tunggu Anda
+        </p>
+      </div>
+
+      <div id="kiosk-services-grid" class="grid-2">
+        <!-- Dynamically loaded services -->
+      </div>
+    </div>
+  </main>
+
+  <!-- Kiosk Registration Modal -->
+  <div id="kiosk-modal" class="modal-overlay">
+    <div class="modal-container">
+      <div class="modal-header">
+        <div>
+          <h3 id="kiosk-modal-title" class="modal-title">Konfirmasi Ambil Tiket</h3>
+          <span id="kiosk-modal-badge" class="badge" style="background: var(--primary); color: #fff; margin-top: 4px;">Layanan</span>
+        </div>
+        <button class="btn btn-icon btn-outline" onclick="KioskModule.closeModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.25rem;">
+          Isi informasi di bawah untuk personalisasi tiket Anda (opsional, dapat dikosongkan untuk pendaftaran langsung).
+        </p>
+        <div class="form-group">
+          <label class="form-label">Nama Pemohon (Opsional):</label>
+          <input type="text" id="kiosk-customer-name" class="form-control" placeholder="Contoh: Budi Santoso" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Nomor WhatsApp / HP (Opsional untuk pelacakan):</label>
+          <input type="tel" id="kiosk-customer-phone" class="form-control" placeholder="Contoh: 081234567890" />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline" onclick="KioskModule.closeModal()">Kembali</button>
+        <button type="button" id="btn-confirm-kiosk" class="btn btn-primary btn-lg">
+          🖨️ Cetak Tiket Sekarang
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ticket Receipt Modal -->
+  <div id="ticket-receipt-modal" class="modal-overlay">
+    <div class="modal-container" style="max-width: 420px; background: #0f172a;">
+      <div class="modal-header">
+        <h3 class="modal-title">🎫 Struk Nomor Antrean</h3>
+        <button class="btn btn-icon btn-outline" onclick="KioskModule.closeReceiptModal()">✕</button>
+      </div>
+      <div class="modal-body" style="padding: 1rem;">
+        <div id="ticket-receipt-container"></div>
+      </div>
+      <div class="modal-footer" style="justify-content: space-between;">
+        <a id="btn-open-tracking" href="/tracking.html" class="btn btn-outline" style="font-size: 0.8rem;">
+          📱 Buka Pelacak HP
+        </a>
+        <div style="display: flex; gap: 0.5rem;">
+          <button type="button" class="btn btn-outline" onclick="KioskModule.closeReceiptModal()">Tutup</button>
+          <button type="button" id="btn-print-ticket" class="btn btn-primary">
+            🖨️ Cetak Tiket
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/socket-client.js"></script>
+  <script src="/js/kiosk.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      KioskModule.init();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+{
+  "name": "tugas-fsd",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NAUFALcreator/tugas-fsd.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NAUFALcreator/tugas-fsd/issues"
+  },
+  "homepage": "https://github.com/NAUFALcreator/tugas-fsd#readme",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.118.0",
+    "cors": "^2.8.6",
+    "dotenv": "^18.0.8",
+    "express": "^5.3.0",
+    "socket.io": "^4.8.4"
+  }
+}

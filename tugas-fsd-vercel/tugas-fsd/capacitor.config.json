@@ -1,0 +1,10 @@
+{
+  "appId": "com.siantri.app",
+  "appName": "SIANTRI Mobile",
+  "webDir": "public",
+  "bundledWebRuntime": false,
+  "server": {
+    "url": "http://localhost:3000/mobile.html",
+    "cleartext": true
+  }
+}

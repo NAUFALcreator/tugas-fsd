@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Layar Monitor Antrean Publik - SIANTRI</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/monitor.css">
+  <script src="/socket.io/socket.io.js" onerror="void 0"></script>
+</head>
+<body class="monitor-body">
+
+  <!-- Sound unlock banner -->
+  <div id="sound-banner" class="sound-alert-banner" style="cursor: pointer;">
+    <span>🔔 Klik di sini untuk mengaktifkan Suara Panggilan & Bell Chime Otomatis</span>
+    <span class="badge" style="background: rgba(255,255,255,0.2); color: #fff;">Aktifkan Suara</span>
+  </div>
+
+  <!-- Monitor Header -->
+  <header class="monitor-header">
+    <div class="monitor-brand">
+      <div class="monitor-logo">🏛️</div>
+      <div class="monitor-title">
+        <h1 id="mon-inst-name">KANTOR PELAYANAN TERPADU</h1>
+        <p id="mon-inst-addr">Pusat Layanan Administrasi & Perizinan Publik</p>
+      </div>
+    </div>
+    <div class="monitor-clock-card">
+      <div id="mon-date" class="monitor-date">Jumat, 16 Oktober 2026</div>
+      <div id="mon-time" class="monitor-time">08:00:00</div>
+    </div>
+  </header>
+
+  <!-- Main Monitor Body -->
+  <main class="monitor-main">
+    <!-- Left Hero Calling Box -->
+    <div class="active-call-container">
+      <div id="calling-hero" class="calling-hero-card">
+        <span class="call-badge-tag">SEDANG DIPANGGIL</span>
+        <div id="calling-num" class="calling-number">---</div>
+        <div id="calling-service" class="calling-service-name">Menunggu Panggilan Berikutnya...</div>
+        <div class="calling-counter-banner">
+          <span class="counter-dest-label">MENUJU KE:</span>
+          <span id="calling-counter" class="counter-dest-name">LOKET</span>
+        </div>
+      </div>
+
+      <!-- History Strip -->
+      <div class="recent-history-section">
+        <div class="history-strip-title">
+          <span>📋 Riwayat Panggilan Terakhir</span>
+          <span style="font-size: 0.75rem; color: var(--text-dim);">Auto-refresh</span>
+        </div>
+        <div id="history-chips" class="history-chips-grid"></div>
+      </div>
+    </div>
+
+    <!-- Right Multi-Counters Grid -->
+    <div class="counters-grid-container">
+      <div class="section-headline">
+        <span>🏛️ Status Seluruh Loket Pelayanan</span>
+        <span class="badge badge-completed">Aktif & Siap Melayani</span>
+      </div>
+      <div id="counters-list" class="counters-monitor-list"></div>
+    </div>
+  </main>
+
+  <!-- Footer Running Text -->
+  <footer class="monitor-footer">
+    <div class="marquee-badge">INFORMASI</div>
+    <div class="marquee-container">
+      <div id="running-text" class="marquee-content">
+        Selamat datang di Sistem Antrean Terpadu. Mohon perhatikan nomor antrean dan loket pelayanan Anda.
+      </div>
+    </div>
+  </footer>
+
+  <script src="/js/audio.js"></script>
+  <script src="/js/socket-client.js"></script>
+  <script>
+    // Sound Unlock
+    const soundBanner = document.getElementById('sound-banner');
+    if (soundBanner) {
+      soundBanner.onclick = () => {
+        window.audioEngine.enableAudio();
+        soundBanner.style.display = 'none';
+      };
+    }
+
+    // Live Clock
+    function updateClock() {
+      const now = new Date();
+      document.getElementById('mon-time').textContent = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      document.getElementById('mon-date').textContent = now.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    }
+    updateClock();
+    setInterval(updateClock, 1000);
+
+    // Render Monitor State
+    function renderState(state) {
+      if (!state) return;
+
+      if (state.settings) {
+        document.getElementById('mon-inst-name').textContent = state.settings.institutionName;
+        document.getElementById('mon-inst-addr').textContent = state.settings.institutionAddress;
+        document.getElementById('running-text').textContent = state.settings.runningText || '';
+      }
+
+      const hero = document.getElementById('calling-hero');
+      const numEl = document.getElementById('calling-num');
+      const srvEl = document.getElementById('calling-service');
+      const cntEl = document.getElementById('calling-counter');
+
+      if (state.currentCall) {
+        numEl.textContent = state.currentCall.ticketCode;
+        srvEl.textContent = state.currentCall.serviceName;
+        cntEl.textContent = state.currentCall.counterName;
+        hero.classList.add('calling-pulse');
+      } else {
+        numEl.textContent = '---';
+        srvEl.textContent = 'Menunggu Panggilan Berikutnya...';
+        cntEl.textContent = 'LOKET';
+        hero.classList.remove('calling-pulse');
+      }
+
+      // History
+      const histEl = document.getElementById('history-chips');
+      const hist = state.history || [];
+      if (hist.length === 0) {
+        histEl.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: var(--text-dim); font-size: 0.8rem; padding: 0.5rem;">Belum ada riwayat panggilan</div>`;
+      } else {
+        histEl.innerHTML = hist.slice(0, 4).map(h => `
+          <div class="history-chip">
+            <div class="chip-num">${h.ticketCode}</div>
+            <div class="chip-counter">${h.counterName}</div>
+          </div>
+        `).join('');
+      }
+
+      // Counters List
+      const cntListEl = document.getElementById('counters-list');
+      if (state.counters) {
+        cntListEl.innerHTML = state.counters.map(c => `
+          <div class="counter-monitor-card ${c.currentTicket ? 'is-active' : ''}">
+            <div class="counter-monitor-info">
+              <h3>${c.name}</h3>
+              <p>${c.staffName}</p>
+            </div>
+            <div class="counter-ticket-display">
+              <div class="counter-ticket-num">${c.currentTicket ? c.currentTicket.ticketCode : '---'}</div>
+              <span class="counter-status-pill ${c.currentTicket ? 'status-serving' : 'status-idle'}">
+                ${c.currentTicket ? 'Melayani' : 'Siap'}
+              </span>
+            </div>
+          </div>
+        `).join('');
+      }
+    }
+
+    // Connect socket
+    window.socketManager.on('monitor_state', (state) => {
+      renderState(state);
+    });
+
+    window.socketManager.on('ticket_called', (data) => {
+      window.audioEngine.announceCall(data.ticket.ticketCode, data.counter ? data.counter.name : 'Loket Pelayanan');
+    });
+
+    // Initial load
+    fetch('/api/monitor').then(r => r.json()).then(renderState);
+  </script>
+</body>
+</html>

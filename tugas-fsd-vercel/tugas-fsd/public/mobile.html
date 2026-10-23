@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>SIANTRI Mobile - Antrean Publik Mandiri</title>
+  
+  <!-- PWA Metadata -->
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#4f46e5">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="SIANTRI">
+
+  <!-- Core Styles -->
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/mobile.css">
+  
+  <!-- Socket.io -->
+  <script src="/socket.io/socket.io.js" onerror="void 0"></script>
+</head>
+<body style="background-color: #060913; margin: 0; padding: 0;">
+
+  <!-- Main Mobile App Shell -->
+  <div class="mobile-app-shell">
+
+    <!-- Top App Bar -->
+    <header class="mobile-top-bar">
+      <div class="mobile-brand-info">
+        <div class="mobile-brand-icon">S</div>
+        <div>
+          <h1>SIANTRI Mobile</h1>
+          <p class="inst-name-display">Mal Pelayanan Publik Terpadu</p>
+        </div>
+      </div>
+      <div style="display: flex; align-items: center; gap: 0.5rem;">
+        <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: #34d399; font-size: 0.7rem; border: 1px solid rgba(16, 185, 129, 0.3);">
+          ● Live
+        </span>
+        <a href="/" class="btn btn-outline" style="padding: 0.35rem 0.6rem; font-size: 0.72rem;" title="Kembali ke Portal Web">
+          💻 Web
+        </a>
+      </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="mobile-content">
+
+      <!-- PWA Install Banner -->
+      <div id="pwa-install-banner" class="pwa-install-banner" style="display: none;">
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <span style="font-size: 1.5rem;">📱</span>
+          <div>
+            <strong style="color: #fff; font-size: 0.85rem; display: block;">Pasang Aplikasi SIANTRI</strong>
+            <span style="font-size: 0.72rem; color: #c7d2fe;">Akses cepat langsung dari Layar Utama HP Anda</span>
+          </div>
+        </div>
+        <button id="btn-pwa-install" class="btn btn-primary" style="font-size: 0.75rem; padding: 0.4rem 0.85rem; white-space: nowrap;">
+          Pasang
+        </button>
+      </div>
+
+      <!-- ===================================================================== -->
+      <!-- TAB 1: BERANDA -->
+      <!-- ===================================================================== -->
+      <section id="tab-home" class="mobile-tab-page active">
+        <!-- Live Calling Banner -->
+        <div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(6, 78, 59, 0.4) 100%); border: 1px solid rgba(16, 185, 129, 0.4); border-radius: 18px; padding: 1.25rem; margin-bottom: 1.25rem; display: flex; align-items: center; justify-content: space-between;">
+          <div>
+            <span style="font-size: 0.7rem; color: #a7f3d0; text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em;">SEDANG DIPANGGIL SAAT INI</span>
+            <div id="home-live-call" class="font-mono" style="font-size: 2.2rem; font-weight: 900; color: #fff; line-height: 1.1; margin: 4px 0;">
+              ---
+            </div>
+            <span style="font-size: 0.75rem; color: #cbd5e1;">Menuju ke <strong id="home-live-counter" style="color: #38bdf8;">LOKET</strong></span>
+          </div>
+          <div style="font-size: 2.5rem; opacity: 0.8;">📢</div>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="grid-2" style="margin-bottom: 1.25rem;">
+          <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 1rem; text-align: center;">
+            <span style="font-size: 0.72rem; color: var(--text-dim); display: block;">Total Antrean Hari Ini</span>
+            <strong id="home-stat-total" class="font-mono" style="font-size: 1.6rem; color: var(--cyan);">0</strong>
+          </div>
+          <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 1rem; text-align: center;">
+            <span style="font-size: 0.72rem; color: var(--text-dim); display: block;">Sedang Menunggu</span>
+            <strong id="home-stat-waiting" class="font-mono" style="font-size: 1.6rem; color: var(--amber);">0</strong>
+          </div>
+        </div>
+
+        <!-- Quick Access Menu -->
+        <h3 style="font-size: 0.95rem; color: #fff; margin-bottom: 0.75rem; font-weight: 700;">Layanan & Menu Cepat</h3>
+
+        <div class="mobile-action-card" onclick="MobileApp.switchTab('take')">
+          <div class="mobile-action-icon" style="background: rgba(99, 102, 241, 0.2); color: #818cf8;">
+            🎫
+          </div>
+          <div style="flex: 1;">
+            <h4 style="font-size: 0.95rem; color: #fff;">Ambil Nomor Antrean</h4>
+            <p style="font-size: 0.75rem; color: var(--text-muted);">Pilih layanan & dapatkan tiket antrean digital</p>
+          </div>
+          <span style="color: var(--text-dim);">→</span>
+        </div>
+
+        <div class="mobile-action-card" onclick="MobileApp.switchTab('ticket')">
+          <div class="mobile-action-icon" style="background: rgba(16, 185, 129, 0.2); color: #34d399;">
+            📱
+          </div>
+          <div style="flex: 1;">
+            <h4 style="font-size: 0.95rem; color: #fff;">Pantau Tiket Saya</h4>
+            <p style="font-size: 0.75rem; color: var(--text-muted);">Lihat sisa antrean & notifikasi panggilan</p>
+          </div>
+          <span style="color: var(--text-dim);">→</span>
+        </div>
+
+        <div class="mobile-action-card" onclick="window.open('/monitor.html', '_blank')">
+          <div class="mobile-action-icon" style="background: rgba(6, 182, 212, 0.2); color: #38bdf8;">
+            🖥️
+          </div>
+          <div style="flex: 1;">
+            <h4 style="font-size: 0.95rem; color: #fff;">Layar Monitor TV</h4>
+            <p style="font-size: 0.75rem; color: var(--text-muted);">Tampilan ruang tunggu layar penuh</p>
+          </div>
+          <span style="color: var(--text-dim);">↗️</span>
+        </div>
+      </section>
+
+      <!-- ===================================================================== -->
+      <!-- TAB 2: AMBIL TIKET -->
+      <!-- ===================================================================== -->
+      <section id="tab-take" class="mobile-tab-page">
+        <div style="margin-bottom: 1.25rem;">
+          <h2 style="font-size: 1.35rem; color: #fff; margin-bottom: 0.25rem;">Pilih Kategori Layanan</h2>
+          <p style="font-size: 0.8rem; color: var(--text-muted);">Silakan pilih jenis urusan administrasi yang Anda butuhkan:</p>
+        </div>
+
+        <div id="mobile-services-list">
+          <!-- Dynamically populated services list -->
+        </div>
+      </section>
+
+      <!-- ===================================================================== -->
+      <!-- TAB 3: TIKET SAYA -->
+      <!-- ===================================================================== -->
+      <section id="tab-ticket" class="mobile-tab-page">
+        <div id="mobile-ticket-container">
+          <!-- Dynamically populated active pass -->
+        </div>
+      </section>
+
+      <!-- ===================================================================== -->
+      <!-- TAB 4: RIWAYAT -->
+      <!-- ===================================================================== -->
+      <section id="tab-history" class="mobile-tab-page">
+        <div style="margin-bottom: 1.25rem;">
+          <h2 style="font-size: 1.35rem; color: #fff; margin-bottom: 0.25rem;">Riwayat Antrean</h2>
+          <p style="font-size: 0.8rem; color: var(--text-muted);">Daftar nomor antrean yang pernah diambil pada perangkat ini:</p>
+        </div>
+
+        <div id="mobile-history-list">
+          <!-- Dynamically populated history -->
+        </div>
+      </section>
+    </main>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="mobile-bottom-nav">
+      <button class="mobile-nav-btn active" data-tab="home">
+        <span class="nav-icon">🏠</span>
+        <span>Beranda</span>
+      </button>
+
+      <button class="mobile-nav-btn" data-tab="take">
+        <span class="nav-icon">🎫</span>
+        <span>Ambil</span>
+      </button>
+
+      <button class="mobile-nav-btn" data-tab="ticket">
+        <span class="nav-icon">📱</span>
+        <span>Tiket Saya</span>
+        <span id="nav-ticket-badge" class="mobile-nav-badge" style="display: none;"></span>
+      </button>
+
+      <button class="mobile-nav-btn" data-tab="history">
+        <span class="nav-icon">📜</span>
+        <span>Riwayat</span>
+      </button>
+    </nav>
+  </div>
+
+  <!-- Registration Bottom Sheet Modal -->
+  <div id="mobile-take-modal" class="modal-overlay">
+    <div class="modal-container" style="align-self: flex-end; border-radius: 24px 24px 0 0; max-height: 85vh;">
+      <div class="modal-header">
+        <div>
+          <h3 id="mobile-form-srv-title" class="modal-title">Layanan</h3>
+          <span id="mobile-form-srv-badge" class="badge" style="margin-top: 4px; background: var(--primary); color: #fff;">Kategori</span>
+        </div>
+        <button class="btn btn-icon btn-outline" onclick="MobileApp.closeTakeForm()">✕</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 1rem;">
+          Isi informasi identitas pemohon di bawah ini untuk mengambil nomor antrean:
+        </p>
+        <div class="form-group">
+          <label class="form-label">Nama Pemohon (Opsional):</label>
+          <input type="text" id="mobile-input-name" class="form-control" placeholder="Contoh: Budi Santoso" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Nomor WhatsApp / HP (Opsional):</label>
+          <input type="tel" id="mobile-input-phone" class="form-control" placeholder="Contoh: 081234567890" />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline" onclick="MobileApp.closeTakeForm()">Batal</button>
+        <button type="button" class="btn btn-primary btn-lg" style="width: 100%;" onclick="MobileApp.submitTakeTicket()">
+          ✅ Ambil Nomor Antrean Sekarang
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="/js/audio.js"></script>
+  <script src="/js/socket-client.js"></script>
+  <script src="/js/mobile.js"></script>
+</body>
+</html>

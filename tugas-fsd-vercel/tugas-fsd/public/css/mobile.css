@@ -1,0 +1,273 @@
+/* ==========================================================================
+   SIANTRI Mobile - Mobile-First Stylesheet (Native App Feel)
+   ========================================================================== */
+
+.mobile-app-shell {
+  max-width: 500px;
+  margin: 0 auto;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #0b0f19;
+  position: relative;
+  box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
+  padding-bottom: 75px; /* bottom nav spacing */
+}
+
+/* Mobile Header */
+.mobile-top-bar {
+  position: sticky;
+  top: 0;
+  z-index: 90;
+  background: rgba(17, 24, 39, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.85rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mobile-brand-info {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.mobile-brand-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #4f46e5, #06b6d4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 1.1rem;
+  color: #fff;
+  box-shadow: 0 0 12px rgba(99, 102, 241, 0.4);
+}
+
+.mobile-top-bar h1 {
+  font-size: 1.05rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.mobile-top-bar p {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+/* Mobile Content Container */
+.mobile-content {
+  flex: 1;
+  padding: 1.25rem;
+}
+
+/* Bottom Navigation Bar */
+.mobile-bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 500px;
+  height: 68px;
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid var(--border-color);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  z-index: 100;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.mobile-nav-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 0.72rem;
+  font-weight: 600;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.mobile-nav-btn .nav-icon {
+  font-size: 1.35rem;
+  transition: transform 0.2s ease;
+}
+
+.mobile-nav-btn.active {
+  color: #818cf8;
+}
+
+.mobile-nav-btn.active .nav-icon {
+  transform: translateY(-2px);
+}
+
+.mobile-nav-btn.active::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  width: 32px;
+  height: 3px;
+  background: #6366f1;
+  border-radius: 0 0 4px 4px;
+  box-shadow: 0 0 10px #6366f1;
+}
+
+.mobile-nav-badge {
+  position: absolute;
+  top: 8px;
+  right: calc(50% - 18px);
+  width: 8px;
+  height: 8px;
+  background: #10b981;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #10b981;
+}
+
+/* Mobile Pages */
+.mobile-tab-page {
+  display: none;
+  animation: mobileFadeIn 0.25s ease-out;
+}
+
+.mobile-tab-page.active {
+  display: block;
+}
+
+@keyframes mobileFadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Active Ticket Hero Pass Card */
+.ticket-pass-card {
+  background: linear-gradient(145deg, #1e1b4b 0%, #0f172a 100%);
+  border: 1px solid rgba(99, 102, 241, 0.35);
+  border-radius: 22px;
+  padding: 1.5rem;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5), 0 0 25px rgba(99, 102, 241, 0.15);
+}
+
+.ticket-pass-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #4f46e5, #06b6d4, #10b981);
+}
+
+.ticket-pass-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+}
+
+.ticket-pass-code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 3.8rem;
+  font-weight: 900;
+  text-align: center;
+  line-height: 1;
+  color: #fff;
+  margin: 0.5rem 0;
+  letter-spacing: -0.02em;
+  text-shadow: 0 0 25px rgba(99, 102, 241, 0.5);
+}
+
+/* Notifikasi Giliran Dekat (Pulsing Gold) */
+.alert-near-turn {
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid var(--amber);
+  border-radius: 14px;
+  padding: 0.85rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  animation: pulseAmber 1.5s infinite;
+  margin: 1rem 0;
+}
+
+@keyframes pulseAmber {
+  0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(245, 158, 11, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
+}
+
+/* Notifikasi Giliran Tiba (Pulsing Green) */
+.alert-called-turn {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.25) 0%, rgba(6, 78, 59, 0.5) 100%);
+  border: 2px solid #10b981;
+  border-radius: 18px;
+  padding: 1.25rem;
+  text-align: center;
+  animation: pulseGreen 1.2s infinite;
+  margin: 1rem 0;
+}
+
+@keyframes pulseGreen {
+  0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.6); }
+  70% { box-shadow: 0 0 0 14px rgba(16, 185, 129, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+
+/* Quick Action Cards */
+.mobile-action-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 1.15rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  cursor: pointer;
+  transition: transform 0.15s ease, border-color 0.15s ease;
+  text-decoration: none;
+  color: inherit;
+  margin-bottom: 0.85rem;
+}
+
+.mobile-action-card:active {
+  transform: scale(0.98);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.mobile-action-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  flex-shrink: 0;
+}
+
+/* PWA Install Banner */
+.pwa-install-banner {
+  background: linear-gradient(90deg, #312e81, #1e1b4b);
+  border: 1px solid #4338ca;
+  border-radius: 16px;
+  padding: 0.85rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+}

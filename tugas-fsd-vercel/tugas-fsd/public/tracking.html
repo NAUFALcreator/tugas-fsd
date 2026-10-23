@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pantau Status Antrean - SIANTRI Mobile</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/socket.io/socket.io.js" onerror="void 0"></script>
+</head>
+<body style="background: #0b0f19; min-height: 100vh; padding: 1.5rem 1rem;">
+
+  <div style="max-width: 520px; margin: 0 auto;">
+    <!-- Mobile Brand Header -->
+    <div style="text-align: center; margin-bottom: 1.5rem;">
+      <div class="brand-logo" style="width: 50px; height: 50px; margin: 0 auto 0.5rem auto; font-size: 1.5rem;">S</div>
+      <h1 style="font-size: 1.35rem; color: #fff;">SIANTRI Mobile</h1>
+      <p style="font-size: 0.8rem; color: var(--text-muted);">Pelacak Antrean Pelanggan Real-Time</p>
+    </div>
+
+    <!-- Main Card -->
+    <div class="card" style="box-shadow: 0 15px 35px rgba(0,0,0,0.5);">
+      <div class="card-header">
+        <h2 class="card-title">📱 Pantau Antrean Saya</h2>
+        <span class="badge badge-completed">Live Update</span>
+      </div>
+
+      <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 1rem;">
+        Ketik kode tiket antrean Anda di bawah ini:
+      </p>
+
+      <div style="display: flex; gap: 0.5rem; margin-bottom: 1.25rem;">
+        <input type="text" id="tracking-input-code" class="form-control font-mono" placeholder="A-001" style="text-transform: uppercase; font-size: 1.15rem; font-weight: 700; text-align: center;" />
+        <button id="btn-search-tracking" class="btn btn-primary" style="white-space: nowrap; padding: 0 1.25rem;">
+          Cek
+        </button>
+      </div>
+
+      <!-- Quick Ticket Buttons -->
+      <div style="margin-bottom: 1.25rem; background: rgba(0,0,0,0.3); padding: 0.75rem; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+        <span style="font-size: 0.72rem; color: var(--text-dim); display: block; margin-bottom: 0.35rem;">Tiket cepat demo:</span>
+        <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
+          <button class="badge font-mono" style="cursor: pointer; background: rgba(99, 102, 241, 0.2); color: #818cf8; border: 1px solid rgba(99, 102, 241, 0.4);" onclick="document.getElementById('tracking-input-code').value='A-004'; TrackingModule.searchTicket('A-004');">A-004</button>
+          <button class="badge font-mono" style="cursor: pointer; background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.4);" onclick="document.getElementById('tracking-input-code').value='A-005'; TrackingModule.searchTicket('A-005');">A-005</button>
+          <button class="badge font-mono" style="cursor: pointer; background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.4);" onclick="document.getElementById('tracking-input-code').value='B-004'; TrackingModule.searchTicket('B-004');">B-004</button>
+        </div>
+      </div>
+
+      <!-- Result Card -->
+      <div id="tracking-result-card" style="display: none; background: rgba(0,0,0,0.25); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 1.25rem;"></div>
+
+      <div style="text-align: center; margin-top: 1rem;">
+        <button id="btn-cancel-my-ticket" class="btn btn-outline" style="display: none; color: #fb7185; border-color: rgba(244,63,94,0.3); font-size: 0.8rem;">
+          ❌ Batalkan Nomor Antrean Ini
+        </button>
+      </div>
+    </div>
+
+    <!-- Bottom link to portal -->
+    <div style="text-align: center; margin-top: 1.5rem;">
+      <a href="/" style="font-size: 0.82rem; color: var(--text-dim); text-decoration: none;">
+        ← Kembali ke Portal Utama SIANTRI
+      </a>
+    </div>
+  </div>
+
+  <script src="/js/audio.js"></script>
+  <script src="/js/socket-client.js"></script>
+  <script src="/js/tracking.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      TrackingModule.init();
+    });
+  </script>
+</body>
+</html>
