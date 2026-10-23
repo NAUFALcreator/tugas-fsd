@@ -1,0 +1,122 @@
+/* ==========================================================================
+   SIANTRI - Thermal Receipt Printing Stylesheet
+   Standard 58mm / 80mm POS Thermal Receipt Format
+   ========================================================================== */
+
+.ticket-print-card {
+  width: 100%;
+  max-width: 320px;
+  margin: 0 auto;
+  background: #ffffff;
+  color: #111827;
+  padding: 1.5rem 1.25rem;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  font-family: 'Plus Jakarta Sans', monospace, sans-serif;
+}
+
+.ticket-print-header h2 {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #111827;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+.ticket-print-header p {
+  font-size: 0.75rem;
+  color: #6b7280;
+  margin-bottom: 0.75rem;
+}
+
+.ticket-print-divider {
+  border-top: 1px dashed #9ca3af;
+  margin: 0.75rem 0;
+}
+
+.ticket-service-badge {
+  display: inline-block;
+  background: #e5e7eb;
+  color: #1f2937;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  margin-bottom: 0.5rem;
+}
+
+.ticket-large-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 3.5rem;
+  font-weight: 900;
+  color: #111827;
+  line-height: 1.1;
+  margin: 0.4rem 0;
+  letter-spacing: -0.02em;
+}
+
+.ticket-info-table {
+  width: 100%;
+  font-size: 0.78rem;
+  margin: 0.75rem 0;
+  text-align: left;
+}
+
+.ticket-info-table td {
+  padding: 0.2rem 0;
+  color: #374151;
+}
+
+.ticket-info-table td.val {
+  text-align: right;
+  font-weight: 700;
+}
+
+.ticket-qr-area {
+  margin: 0.75rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.ticket-qr-img {
+  width: 110px;
+  height: 110px;
+  border-radius: 6px;
+  border: 1px solid #e5e7eb;
+}
+
+.ticket-qr-hint {
+  font-size: 0.7rem;
+  color: #6b7280;
+}
+
+.ticket-print-footer {
+  font-size: 0.72rem;
+  color: #9ca3af;
+  margin-top: 0.5rem;
+}
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .ticket-print-card, .ticket-print-card * {
+    visibility: visible;
+  }
+  .ticket-print-card {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 78mm;
+    box-shadow: none;
+    border: none;
+    padding: 2mm;
+    margin: 0;
+  }
+  .no-print {
+    display: none !important;
+  }
+}
